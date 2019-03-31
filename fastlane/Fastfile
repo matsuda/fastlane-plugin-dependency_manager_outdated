@@ -1,0 +1,3 @@
+lane :test do
+  dependency_manager_outdated
+end
