@@ -27,11 +27,45 @@ module Fastlane
 
       def self.available_options
         [
-          # FastlaneCore::ConfigItem.new(key: :your_option,
-          #                         env_name: "DEPENDENCY_MANAGER_OUTDATED_YOUR_OPTION",
-          #                      description: "A description of your option",
-          #                         optional: false,
-          #                             type: String)
+          FastlaneCore::ConfigItem.new(key: :project_directory,
+                                       env_name: "DEPENDENCY_MANAGER_PROJECT_DIRECTORY",
+                                       description: "The path to the root of the project directory",
+                                       optional: true),
+
+          # slack
+          FastlaneCore::ConfigItem.new(key: :slack_url,
+                                       short_option: "-i",
+                                       env_name: "DEPENDENCY_MANAGER_SLACK_URL",
+                                       sensitive: true,
+                                       description: "Create an Incoming WebHook for your Slack group to post results there",
+                                       optional: true,
+                                       verify_block: proc do |value|
+                                         if !value.to_s.empty? && !value.start_with?("https://")
+                                           UI.user_error!("Invalid URL, must start with https://")
+                                         end
+                                       end),
+          FastlaneCore::ConfigItem.new(key: :slack_channel,
+                                       short_option: "-e",
+                                       env_name: "DEPENDENCY_MANAGER_SLACK_CHANNEL",
+                                       description: "#channel or @username",
+                                       optional: true),
+          FastlaneCore::ConfigItem.new(key: :slack_username,
+                                       env_name: "DEPENDENCY_MANAGER_SLACK_USERNAME",
+                                       description: "Overrides the webhook's username property if slack_use_webhook_configured_username_and_icon is false",
+                                       default_value: "fastlane",
+                                       is_string: true,
+                                       optional: true),
+          FastlaneCore::ConfigItem.new(key: :slack_icon_url,
+                                       env_name: "DEPENDENCY_MANAGER_SLACK_ICON_URL",
+                                       description: "Overrides the webhook's image property if slack_use_webhook_configured_username_and_icon is false",
+                                       default_value: "https://s3-eu-west-1.amazonaws.com/fastlane.tools/fastlane.png",
+                                       is_string: true,
+                                       optional: true),
+          FastlaneCore::ConfigItem.new(key: :skip_slack,
+                                       env_name: "DEPENDENCY_MANAGER_SKIP_SLACK",
+                                       description: "Don't publish to slack, even when an URL is given",
+                                       is_string: false,
+                                       default_value: false),
         ]
       end
 
@@ -39,8 +73,7 @@ module Fastlane
         # Adjust this if your plugin only works for a particular platform (iOS vs. Android, for example)
         # See: https://docs.fastlane.tools/advanced/#control-configuration-by-lane-and-by-platform
         #
-        # [:ios, :mac, :android].include?(platform)
-        true
+        [:ios].include?(platform)
       end
     end
   end
