@@ -1,3 +1,7 @@
 lane :test do |options|
   dependency_manager_outdated(options)
 end
+
+lane :test_cocoapods do |options|
+  cocoapods_outdated(options)
+end
