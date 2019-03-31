@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.email         = 'kosukematsuda@gmail.com'
 
   spec.summary       = 'Fastlane plugin to check project\'s outdated dependencies'
-  # spec.homepage      = "https://github.com/<GITHUB_USERNAME>/fastlane-plugin-dependency_manager_outdated"
+  spec.homepage      = "https://github.com/matsuda/fastlane-plugin-dependency_manager_outdated"
   spec.license       = "MIT"
 
   spec.files         = Dir["lib/**/*"] + %w(README.md LICENSE)
