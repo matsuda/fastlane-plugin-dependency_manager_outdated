@@ -5,7 +5,8 @@ module Fastlane
   module Actions
     class DependencyManagerOutdatedAction < Action
       def self.run(params)
-        UI.message("The dependency_manager_outdated plugin is working!")
+        Actions::CarthageOutdatedAction.run(params)
+        Actions::CocoapodsOutdatedAction.run(params)
       end
 
       def self.description
@@ -30,6 +31,25 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :project_directory,
                                        env_name: "DEPENDENCY_MANAGER_PROJECT_DIRECTORY",
                                        description: "The path to the root of the project directory",
+                                       optional: true),
+          # carthage_outdated_action
+          FastlaneCore::ConfigItem.new(key: :use_ssh,
+                                       env_name: "DEPENDENCY_MANAGER_CARTHAGE_USE_SSH",
+                                       description: "Use SSH for downloading GitHub repositories",
+                                       is_string: false,
+                                       type: Boolean,
+                                       optional: true),
+          # cocoapods_outdated_action
+          FastlaneCore::ConfigItem.new(key: :use_bundle_exec,
+                                       env_name: "DEPENDENCY_MANAGER_COCOAPODS_USE_BUNDLE_EXEC",
+                                       description: "Use bundle exec when there is a Gemfile presented",
+                                       is_string: false,
+                                       default_value: true),
+          FastlaneCore::ConfigItem.new(key: :no_repo_update,
+                                       env_name: "COCOAPODS_OUTDATED_REPO_UPDATE",
+                                       description: "Skip running `pod repo update` before install",
+                                       is_string: false,
+                                       type: Boolean,
                                        optional: true),
 
           # slack
@@ -74,6 +94,17 @@ module Fastlane
         # See: https://docs.fastlane.tools/advanced/#control-configuration-by-lane-and-by-platform
         #
         [:ios].include?(platform)
+      end
+
+      def self.example_code
+        [
+          'dependency_manager_outdated',
+          'dependency_manager_outdated(
+            project_directory: "path/to/xcode/project",
+            no_repo_update: true,
+            slack_url: "https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX",
+          )',
+        ]
       end
     end
   end
