@@ -113,6 +113,7 @@ module Fastlane
 
       def self.example_code
         [
+          'cocoapods_outdated',
           'cocoapods_outdated(
             project_directory: "path/to/xcode/project",
             no_repo_update: true,
