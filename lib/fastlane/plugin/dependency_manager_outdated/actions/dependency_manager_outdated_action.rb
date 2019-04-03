@@ -5,8 +5,8 @@ module Fastlane
   module Actions
     class DependencyManagerOutdatedAction < Action
       def self.run(params)
-        Actions::CarthageOutdatedAction.run(params)
         Actions::CocoapodsOutdatedAction.run(params)
+        Actions::CarthageOutdatedAction.run(params)
       end
 
       def self.description
