@@ -10,7 +10,7 @@ module Fastlane
       # as `Helper::CocoapodsOutdatedHelper.your_method`
       #
 
-      SEPARATOR = "The following pod updates are available:"
+      MESSAGE = "The following pod updates are available:"
       # ex.)
       # - Fabric 1.7.8 -> 1.9.0 (latest version 1.9.0)
       PATTERN = /^- (\S+) (\S+) -> (\S+) \(latest version (\S+)\)$/
@@ -20,11 +20,11 @@ module Fastlane
       end
 
       def self.message
-        SEPARATOR
+        MESSAGE
       end
 
       def self.parse(str)
-        result = str.split(SEPARATOR + "\n")[1]
+        result = str.split(MESSAGE + "\n")[1]
         libs = result.split("\n")
 
         results = []

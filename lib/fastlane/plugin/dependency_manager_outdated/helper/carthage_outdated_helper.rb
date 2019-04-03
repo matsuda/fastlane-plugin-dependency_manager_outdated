@@ -9,7 +9,7 @@ module Fastlane
       # class methods that you define here become available in your action
       # as `Helper::CarthageOutdatedHelper.your_method`
 
-      SEPARATOR = "The following dependencies are outdated:"
+      MESSAGE = "The following dependencies are outdated:"
       # ex.)
       # Alamofire "4.7.3" -> "4.7.3" (Latest: "4.8.2")
       PATTERN = /^(\S+) "(\S+)" -> "(\S+)" \(Latest: "(\S+)"\)$/
@@ -23,11 +23,11 @@ module Fastlane
       end
 
       def self.message
-        SEPARATOR
+        MESSAGE
       end
 
       def self.parse(str)
-        result = str.split(SEPARATOR + "\n")[1]
+        result = str.split(MESSAGE + "\n")[1]
         libs = result.split("\n")
 
         results = []
