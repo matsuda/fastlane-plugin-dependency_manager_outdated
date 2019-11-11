@@ -24,10 +24,13 @@ module Fastlane
       end
 
       def self.parse(str)
+        results = []
+
         result = str.split(MESSAGE + "\n")[1]
+        return results unless result
+
         libs = result.split("\n")
 
-        results = []
         libs.each do |lib|
           lib.match(PATTERN)
           results << Dependency.new($1, $2, $3, $4)
