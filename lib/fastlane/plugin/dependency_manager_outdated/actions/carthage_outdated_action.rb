@@ -21,17 +21,20 @@ module Fastlane
 
         dependencies = Helper::CarthageOutdatedHelper.parse(result)
 
-        repos = Helper::CarthageOutdatedHelper.resolved(params[:project_directory])
-        Actions.lane_context[SharedValues::CARTHAGE_REPOSITORY_LIST] = repos
+        if dependencies.empty?
+          UI.success("All dependencies are up to date.")
+        else
+          repos = Helper::CarthageOutdatedHelper.resolved(params[:project_directory])
+          Actions.lane_context[SharedValues::CARTHAGE_REPOSITORY_LIST] = repos
 
-        dependencies.each do |lib|
-          if repository = repos[lib[:name]]
-            lib[:repository] = repository
+          dependencies.each do |lib|
+            if repository = repos[lib[:name]]
+              lib[:repository] = repository
+            end
           end
+          Actions.lane_context[SharedValues::CARTHAGE_OUTDATED_LIST] = dependencies
+          Helper::CarthageOutdatedHelper.notify_slack(dependencies)
         end
-        Actions.lane_context[SharedValues::CARTHAGE_OUTDATED_LIST] = dependencies
-
-        Helper::CarthageOutdatedHelper.notify_slack(dependencies)
       end
 
       #####################################################

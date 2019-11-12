@@ -21,9 +21,13 @@ module Fastlane
         result = Actions.sh(cmd.join(' '))
 
         dependencies = Helper::CocoapodsOutdatedHelper.parse(result)
-        Actions.lane_context[SharedValues::COCOAPODS_OUTDATED_LIST] = dependencies
 
-        Helper::CocoapodsOutdatedHelper.notify_slack(dependencies)
+        if dependencies.empty?
+          UI.success("No pod updates are available.")
+        else
+          Actions.lane_context[SharedValues::COCOAPODS_OUTDATED_LIST] = dependencies
+          Helper::CocoapodsOutdatedHelper.notify_slack(dependencies)
+        end
       end
 
       #####################################################
